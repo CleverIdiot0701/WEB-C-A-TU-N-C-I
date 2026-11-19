@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trình Phát Video Tự Động</title>
+    <style>
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* Tỷ lệ 16:9 */
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #nextButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center">NHẠC HAY NHẤT XÃ ĐỘI</h1>
+  <p style="text-align:center">Auth: TRƯƠNG MINH TUẤN </p>
+<div class="video-container">
+    <iframe id="videoPlayer" src="https://www.youtube.com/embed/zJWZoNDt-DM?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
+</div>
+<button id="nextButton">Chuyển Sang Video Tiếp Theo</button>
+<button id="rollbackButton">Chuyển Sang Video Tiếp Theo</button>
+
+<script>
+    var player;
+    var videoIds = ['zJWZoNDt-DM', 'oaxpY1EjLH0', 'eeepsgvOsPc']; // Thay thế VIDEO_ID_2 và VIDEO_ID_3 bằng ID video thực tế
+    var currentVideoIndex = 0;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('videoPlayer', {
+            events: {
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.ENDED) {
+            currentVideoIndex++;
+            if (currentVideoIndex < videoIds.length) {
+                player.loadVideoById(videoIds[currentVideoIndex]);
+            }
+        }
+    }
+    document.getElementById('rollbackButton').addEventListener('click', function() {
+    currentVideoIndex--;
+
+        if (currentVideoIndex >= 0) {
+            player.loadVideoById(videoIds[currentVideoIndex]);
+        } else {
+            currentVideoIndex = 0;
+            alert('Đây là video đầu tiên!');
+        }
+    });
+    document.getElementById('nextButton').addEventListener('click', function() {
+        currentVideoIndex++;
+        if (currentVideoIndex < videoIds.length) {
+            player.loadVideoById(videoIds[currentVideoIndex]);
+        } else {
+            alert('Đã đến video cuối cùng!');
+        }
+    });
+
+    // Tải API YouTube
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    
+    
+    // rollback
+    window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("myBtn").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+</script>
+
+</body>
+</html>
